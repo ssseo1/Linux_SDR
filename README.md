@@ -1,4 +1,21 @@
-# radio_periph_lab
+# Linux SDR with Ethernet
+
+The C source code (Linux_SDR.c) can be found under src > linux_software.
+- To compile: 
+```gcc Linux_SDR.c -o Linux_SDR -lpthread```
+- To run:
+```./Linux_SDR 192.168.1.255```
+  - Note this is just an example address. Replace with personal IP.
+- To use:
+  - A menu will be printed out with all recognized user inputs
+  - Type a letter and hit 'Enter'
+  - For setting frequencies or a new ip, the user will be prompted again to enter an applicable value
+    - Frequencies must be in Hz
+    - IP addresses must be in standard format, see above for an example
+  - Other menu options will simply execute after 'Enter' is pressed
+
+
+The following build instructions are the same from the README provided in Lab 7:
 
 Note : if you are building in windows and vivado is not installed in c:\Xilinx\Vivado\2022.1, you will have to change one thing
 I included the settings64.bat file in the make_project.bat just to save a step.  Change that to your Install directory
