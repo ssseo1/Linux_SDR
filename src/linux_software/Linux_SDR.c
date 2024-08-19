@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
 
     printf("\r\n\r\n\r\nLab 9 Sophia Seo - Final Linux SDR Lab\n\r");
     *(my_radio+RADIO_TUNER_CONTROL_REG_OFFSET) = 0; // make sure radio isn't in reset
-    printf("\r\nEnter 't' to tune radio to a new frequency.\r\nEnter 'f' to set the fake ADC to a new frequency.\r\nEnter 'U/u' to increase fake ADC frequency by 1000/100 Hz.\r\nEnter 'D/d' to decrease fake ADC frequency by 1000/100 Hz.\r\nEnter 'r' to reset the DDS.\r\nEnter 's' to start/stop streaming data.\r\nEnter 'i' to set a new IP address.\r\nEnter [space] to repeat this menu.\r\n");
+    printf("\r\nPlease hit 'Enter' after typing your selection.\r\nEnter 't' to tune radio to a new frequency.\r\nEnter 'f' to set the fake ADC to a new frequency.\r\nEnter 'U/u' to increase fake ADC frequency by 1000/100 Hz.\r\nEnter 'D/d' to decrease fake ADC frequency by 1000/100 Hz.\r\nEnter 'r' to reset the DDS.\r\nEnter 's' to start/stop streaming data.\r\nEnter 'i' to set a new IP address.\r\nEnter [space] to repeat this menu.\r\n");
 
     // separate thread for streaming data
     pthread_t thread_id;
@@ -210,6 +210,10 @@ int main(int argc, char *argv[])
                         printf("Frequency can't be higher than 125000000. Setting to 125 MHz...\r\n");
                         adc_freq = 125000000;
                     }
+                    else if (adc_freq < 0) {
+                        printf("Frequency can't be lower than 0. Setting to 0 Hz...\r\n");
+                        adc_freq = 0;
+                    }
                     // set ADC frequency
                     radioTuner_setAdcFreq(my_radio,adc_freq);
                 }
@@ -235,6 +239,10 @@ int main(int argc, char *argv[])
                     if(tune_freq > 125000000) {
                         printf("Frequency can't be higher than 125000000. Setting to 125 MHz...\r\n");
                         tune_freq = 125000000;
+                    }
+                    else if (adc_freq < 0) {
+                        printf("Frequency can't be lower than 0. Setting to 0 Hz...\r\n");
+                        adc_freq = 0;
                     }
                     // set tune frequency
                     radioTuner_tuneRadio(my_radio,tune_freq);
@@ -294,7 +302,11 @@ int main(int argc, char *argv[])
             case 'i':
                 // get new IP from user input
                 printf("Enter new destination IP address: ");
+                while(getchar() != '\n') {
+                    ;
+                }
                 fgets(dest_IP, 20, stdin);
+                dest_IP[strcspn(dest_IP, "\n")] = 0;    // remove newline
                 servaddr.sin_addr.s_addr = inet_addr(dest_IP);
                 break;
 
@@ -311,7 +323,7 @@ int main(int argc, char *argv[])
 
             // REPRINT MENU
             case ' ':
-                printf("\r\nEnter 't' to tune radio to a new frequency.\r\nEnter 'f' to set the fake ADC to a new frequency.\r\nEnter 'U/u' to increase fake ADC frequency by 1000/100 Hz.\r\nEnter 'D/d' to decrease fake ADC frequency by 1000/100 Hz.\r\nEnter 'r' to reset the DDS.\r\nEnter 's' to start/stop streaming data.\r\nEnter 'i' to set a new IP address.\r\nEnter [space] to repeat this menu.\r\n");
+                printf("\r\nPlease hit 'Enter' after typing your selection.\r\nEnter 't' to tune radio to a new frequency.\r\nEnter 'f' to set the fake ADC to a new frequency.\r\nEnter 'U/u' to increase fake ADC frequency by 1000/100 Hz.\r\nEnter 'D/d' to decrease fake ADC frequency by 1000/100 Hz.\r\nEnter 'r' to reset the DDS.\r\nEnter 's' to start/stop streaming data.\r\nEnter 'i' to set a new IP address.\r\nEnter [space] to repeat this menu.\r\n");
                 break;
 
             case '\n':
@@ -319,7 +331,7 @@ int main(int argc, char *argv[])
 
             default:
                 printf("\r\nKey input not recognized. Reprinting menu:\r\n");
-                printf("\r\nEnter 't' to tune radio to a new frequency.\r\nEnter 'f' to set the fake ADC to a new frequency.\r\nEnter 'U/u' to increase fake ADC frequency by 1000/100 Hz.\r\nEnter 'D/d' to decrease fake ADC frequency by 1000/100 Hz.\r\nEnter 'r' to reset the DDS.\r\nEnter 's' to start/stop streaming data.\r\nEnter 'i' to set a new IP address.\r\nEnter [space] to repeat this menu.\r\n");
+                printf("\r\nPlease hit 'Enter' after typing your selection.\r\nEnter 't' to tune radio to a new frequency.\r\nEnter 'f' to set the fake ADC to a new frequency.\r\nEnter 'U/u' to increase fake ADC frequency by 1000/100 Hz.\r\nEnter 'D/d' to decrease fake ADC frequency by 1000/100 Hz.\r\nEnter 'r' to reset the DDS.\r\nEnter 's' to start/stop streaming data.\r\nEnter 'i' to set a new IP address.\r\nEnter [space] to repeat this menu.\r\n");
         }
     }
     return 0;
